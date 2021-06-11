@@ -127,15 +127,12 @@ namespace GloriousAbomination
             torchVol.loop = true;
             torchVol.rolloffMode = AudioRolloffMode.Linear;
             //if (AudioMan.instance == null) Jotunn.Logger.LogError("lolwut");
-            //else torchVol.outputAudioMixerGroup = mixer;
-
+           
             var torchBreak = torchFab.GetComponent<WearNTear>();
             torchBreak.m_destroyedEffect = breakTorch;
             torchBreak.m_hitEffect = hitTorch;
 
-
             //torchVol.outputAudioMixerGroup
-
 
             var torchEffect = torchFab.GetComponent<Piece>();
             torchEffect.m_placeEffect = buildTorch;
