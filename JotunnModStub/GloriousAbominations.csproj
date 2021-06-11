@@ -87,7 +87,6 @@
     <None Include="Environment.props" />
     <None Include="packages.config" />
     <None Include="Package\README.md" />
-    <EmbeddedResource Include="test" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Package\plugins\" />
