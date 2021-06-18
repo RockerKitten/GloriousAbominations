@@ -89,7 +89,6 @@
     <None Include="Package\README.md" />
     <EmbeddedResource Include="rainbowwigs" />
     <EmbeddedResource Include="rainbows" />
-    <EmbeddedResource Include="rainbowfire" />
     <EmbeddedResource Include="rainbowplants" />
   </ItemGroup>
   <ItemGroup>
