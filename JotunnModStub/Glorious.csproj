@@ -92,7 +92,7 @@
     <EmbeddedResource Include="rainbowplants" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Package\plugins\" />
+    <Folder Include="Package\plugins\Glorious\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Package\manifest.json" />

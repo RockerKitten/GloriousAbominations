@@ -43,7 +43,7 @@ namespace Glorious
         public CustomItem wigC;
         public GameObject wigMohawkPonyFab;
         public CustomItem wigMohawkPony;
-        //public GameObject rk_trollarmor;
+        //public GameObject rb_trollarmor;
         //public CustomItem trollarmor;
         //public Texture torchtex;
 
@@ -53,10 +53,10 @@ namespace Glorious
 
         private void Awake()
         {
-
+            LoadLocalizaion();
             AssetLoad();
-
             ItemManager.OnVanillaItemsAvailable += LoadSounds;
+            
 
         }
         private void AssetLoad()
@@ -68,8 +68,8 @@ namespace Glorious
         }
         private void LoadSounds()
         {
-            //try
-            //{
+            try
+            {
             var sfxstone = PrefabManager.Cache.GetPrefab<GameObject>("sfx_build_hammer_stone");
             var vfxstone = PrefabManager.Cache.GetPrefab<GameObject>("vfx_Place_stone_wall_2x1");
             var sfxwood = PrefabManager.Cache.GetPrefab<GameObject>("sfx_build_hammer_wood");
@@ -86,7 +86,7 @@ namespace Glorious
             var sfxcraftdone = PrefabManager.Cache.GetPrefab<GameObject>("sfx_gui_craftitem_workbench_end"); //(craft item done
             var sfxrepair = PrefabManager.Cache.GetPrefab<GameObject>("sfx_gui_repairitem_workbench"); //enabled = true repair item effect
             var vfsrainbows = assetRainbow.LoadAsset<GameObject>("vfxRainbowHearts");
-            //var rk_trollarmor = PrefabManager.Cache.GetPrefab<GameObject>("ArmorTrollLeatherChest");
+            //var rb_trollarmor = PrefabManager.Cache.GetPrefab<GameObject>("ArmorTrollLeatherChest");
 
 
 
@@ -144,6 +144,14 @@ namespace Glorious
             LoadPosts6();
             LoadPosts7();
             LoadPosts8();
+            LoadFloor1();
+            LoadFloor2();
+            LoadFloor3();
+            LoadFloor4();
+            LoadRoof1();
+            LoadRoof2();
+            LoadRoof3();
+            LoadRoof4();
             LoadTorch2();
             LoadTorchs();
             LoadWallTorch();
@@ -158,22 +166,33 @@ namespace Glorious
 
             //bonfireVol.outputAudioMixerGroup = AudioMan.instance.m_ambientMixer;
 
-            /*}
+            }
             catch (Exception ex)
             {
                 Jotunn.Logger.LogError($"Error while running OnVanillaLoad: {ex.Message}");
             }
             finally
-            {*/
+            {
             ItemManager.OnVanillaItemsAvailable -= LoadSounds;
 
-            //}
+            }
 
         }
-        public void LoadTorchs()
+        public void LoadLocalizaion()
+        {
+            TextAsset[] textAssets = assetRainbow.LoadAllAssets<TextAsset>();
+            foreach (var textAsset in textAssets)
+            {
+                var English = textAsset.name.Replace("English.json", null);
+                LocalizationManager.Instance.AddJson(English, textAsset.ToString());
+                
+            }
+        }
+       
+    public void LoadTorchs()
 
         {
-            var torchFab = assetRainbow.LoadAsset<GameObject>("plum_rainbowtorch");
+            var torchFab = assetRainbow.LoadAsset<GameObject>("rb_rainbowtorch");
             var torch = new CustomPiece(torchFab,
                 new PieceConfig
                 {
@@ -185,7 +204,7 @@ namespace Glorious
                     {
                          new RequirementConfig { Item = "Iron", Amount = 1, Recover = true },
                          new RequirementConfig {Item = "Resin", Amount = 2, Recover = true},
-                         new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true}
+                         new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -202,7 +221,7 @@ namespace Glorious
         public void LoadBrazier()
 
         {
-            var torchFab = assetRainbow.LoadAsset<GameObject>("plum_brazier");
+            var torchFab = assetRainbow.LoadAsset<GameObject>("rb_brazier");
             var torch = new CustomPiece(torchFab,
                 new PieceConfig
                 {
@@ -214,7 +233,7 @@ namespace Glorious
                     {
                          new RequirementConfig { Item = "Bronze", Amount = 1, Recover = true },
                          new RequirementConfig {Item = "Resin", Amount = 2, Recover = true},
-                         new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true}
+                         new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -232,7 +251,7 @@ namespace Glorious
         public void LoadWallTorch()
 
         {
-            var torchFab = assetRainbow.LoadAsset<GameObject>("plum_walltorch");
+            var torchFab = assetRainbow.LoadAsset<GameObject>("rb_walltorch");
             var torch = new CustomPiece(torchFab,
                 new PieceConfig
                 {
@@ -244,7 +263,7 @@ namespace Glorious
                     {
                          new RequirementConfig { Item = "Copper", Amount = 1, Recover = true },
                          new RequirementConfig {Item = "Resin", Amount = 2, Recover = true},
-                         new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true}
+                         new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -260,19 +279,19 @@ namespace Glorious
         }
         private void LoadTorch2()
         { 
-            var torch2Fab = assetRainbow.LoadAsset<GameObject>("plum_groundtorch_wood");
+            var torch2Fab = assetRainbow.LoadAsset<GameObject>("rb_groundtorch_wood");
              var torch2 = new CustomPiece(torch2Fab,
                  new PieceConfig
                  {
-                     CraftingStation = "rk_rainbowbridge",
+                     CraftingStation = "rb_rainbowbridge",
                      AllowedInDungeons = false,
                      Enabled = true,
-                     PieceTable = "_rainbowPiecetable",
+                     PieceTable = "_RainbowPieceTable",
                      Requirements = new[]
                      {
                          new RequirementConfig {Item = "Wood", Amount = 2, Recover = true},
                          new RequirementConfig {Item = "Resin", Amount = 2, Recover = false},
-                         new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true}
+                         new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true}
                      }
 
 
@@ -284,24 +303,27 @@ namespace Glorious
             var torch2Break = torch2Fab.GetComponent<WearNTear>();
              torch2Break.m_destroyedEffect = breakTorch;
              torch2Break.m_hitEffect = hitTorch;
+            
 
              var torch2Effect = torch2Fab.GetComponent<Piece>();
              torch2Effect.m_placeEffect = buildTorch;
+            
+
             PieceManager.Instance.AddPiece(torch2);
 
          }
          /*public void LoadRainbowCape()
          {
             
-           var rainbowcloakFab = assetRainbow.LoadAsset<GameObject>("rk_rainbowcape");
+           var rainbowcloakFab = assetRainbow.LoadAsset<GameObject>("rb_rainbowcape");
            var rainbowcloak = new CustomItem(rainbowcloakFab, fixReference: false,
                 new ItemConfig
                  {
                      Name = "$rainbow_cloak",
                      Enabled = true,
                      Amount = 1,
-                     CraftingStation = "rk_rainbowbridge",
-                     RepairStation = "rk_rainbowbridge",
+                     CraftingStation = "rb_rainbowbridge",
+                     RepairStation = "rb_rainbowbridge",
                      MinStationLevel = 1,
                      Requirements = new[]
                      {
@@ -322,11 +344,14 @@ namespace Glorious
                     Name = "$claire_kiara_rainbow",
                     Enabled = true,
                     Amount = 1,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     MinStationLevel = 1,
                     Requirements = new[]
                     {
-                        new RequirementConfig {Item = "LinenThread", Amount = 2, AmountPerLevel = 1}
+                        new RequirementConfig {Item = "LinenThread", Amount = 2, AmountPerLevel = 1},
+                        new RequirementConfig {Item = "BlackMetal", Amount = 5, AmountPerLevel = 1},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, AmountPerLevel = 0},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, AmountPerLevel = 0}
                     }
                 });
             ItemManager.Instance.AddItem(wigC);
@@ -340,11 +365,14 @@ namespace Glorious
                     Name = "$mohawkpony_redearcat_rainbow",
                     Enabled = true,
                     Amount = 1,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     MinStationLevel = 1,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "LinenThread", Amount = 2, AmountPerLevel = 1},
+                        new RequirementConfig {Item = "BlackMetal", Amount = 5, AmountPerLevel = 1},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, AmountPerLevel = 0},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, AmountPerLevel = 0}
 
                     }
                 });
@@ -352,7 +380,7 @@ namespace Glorious
         }
         public void LoadRainbowWorkbench()
         {
-            var workbenchFab = assetRainbow.LoadAsset<GameObject>("rk_rainbowbridge");
+            var workbenchFab = assetRainbow.LoadAsset<GameObject>("rb_rainbowbridge");
             var workbench = new CustomPiece(workbenchFab,
                 new PieceConfig
                 {
@@ -377,20 +405,21 @@ namespace Glorious
 
             var workbenchBreak = workbenchFab.GetComponent<WearNTear>();
             workbenchBreak.m_destroyedEffect = breakWood;
+            workbenchBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(workbench);
 
         }
         private void LoadRainbowHammer()
         {
-            var rainbowhammerFab = assetRainbow.LoadAsset<GameObject>("rk_rainbowhammer");
+            var rainbowhammerFab = assetRainbow.LoadAsset<GameObject>("rb_rainbowhammer");
             var rainbowhammer = new CustomItem(rainbowhammerFab, fixReference: false,
                 new ItemConfig
                 {
                     Name = "$rainbow_hammer",
                     Enabled = true,
                     Amount = 1,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     MinStationLevel = 1,
                     Requirements = new[]
                     {
@@ -405,11 +434,11 @@ namespace Glorious
         }
         private void LoadRainbowBanner()
         {
-            var rainbowbannerFab = assetRainbow.LoadAsset<GameObject>("rk_rainbowbanner");
+            var rainbowbannerFab = assetRainbow.LoadAsset<GameObject>("rb_rainbowbanner");
             var rainbowbanner = new CustomPiece(rainbowbannerFab,
                 new PieceConfig
                 {
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     Enabled = true,
                     AllowedInDungeons = false,
                     PieceTable = "_RainbowPieceTable",
@@ -417,8 +446,8 @@ namespace Glorious
                    {
                        new RequirementConfig {Item = "LeatherScraps", Amount = 6, Recover = true},
                        new RequirementConfig {Item = "FineWood", Amount = 2, Recover = true},
-                       new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                       new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                       new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                       new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                    }
                 });
             var bannerbuild = rainbowbannerFab.GetComponent<Piece>();
@@ -426,16 +455,17 @@ namespace Glorious
 
             var bannerdestroy = rainbowbannerFab.GetComponent<WearNTear>();
             bannerdestroy.m_destroyedEffect = breakWood;
+            bannerdestroy.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(rainbowbanner);
         }
         private void LoadRainbowBannerPastel()
         {
-            var rainbowbannerFab = assetRainbow.LoadAsset<GameObject>("rk_rainbowbanner_pastel");
+            var rainbowbannerFab = assetRainbow.LoadAsset<GameObject>("rb_rainbowbanner_pastel");
             var rainbowbannerpastel = new CustomPiece(rainbowbannerFab,
                 new PieceConfig
                 {
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     Enabled = true,
                     AllowedInDungeons = false,
                     PieceTable = "_RainbowPieceTable",
@@ -443,8 +473,8 @@ namespace Glorious
                    {
                        new RequirementConfig {Item = "LeatherScraps", Amount = 6, Recover = true},
                        new RequirementConfig {Item = "FineWood", Amount = 2, Recover = true},
-                       new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                       new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                       new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                       new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                    }
                 });
             var bannerbuild = rainbowbannerFab.GetComponent<Piece>();
@@ -452,19 +482,20 @@ namespace Glorious
 
             var bannerdestroy = rainbowbannerFab.GetComponent<WearNTear>();
             bannerdestroy.m_destroyedEffect = breakWood;
+            bannerdestroy.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(rainbowbannerpastel);
         }
         private void LoadPrimaryPaint()
         {
-            var primarypaintFab = assetRainbow.LoadAsset<GameObject>("rk_primary");
+            var primarypaintFab = assetRainbow.LoadAsset<GameObject>("rb_primary");
             var primarypaint = new CustomItem(primarypaintFab, fixReference: false,
                 new ItemConfig
                 {
                     Name = "$primary",
                     Amount = 2,
                     Enabled = true,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     Requirements = new[]
                     {
                         new RequirementConfig { Item = "Blueberries", Amount = 1 },
@@ -476,13 +507,13 @@ namespace Glorious
         }
         private void LoadSecondaryPaint()
         {
-            var secondarypaintFab = assetRainbow.LoadAsset<GameObject>("rk_secondary");
+            var secondarypaintFab = assetRainbow.LoadAsset<GameObject>("rb_secondary");
             var secondarypaint = new CustomItem(secondarypaintFab, fixReference: false,
             new ItemConfig
             {
                 Name = "$secondary",
                 Amount = 2,
-                CraftingStation = "rk_rainbowbridge",
+                CraftingStation = "rb_rainbowbridge",
                 Enabled = true,
                 Requirements = new[]
                 {
@@ -495,18 +526,18 @@ namespace Glorious
         }
         private void LoadRainbowCone()
         {
-            var rainbowconeFab = assetRainbow.LoadAsset<GameObject>("rk_rainbowcone");
+            var rainbowconeFab = assetRainbow.LoadAsset<GameObject>("rb_rainbowcone");
             var rainbowcone = new CustomItem(rainbowconeFab, fixReference: false,
                 new ItemConfig
                 {
                     Name = "$rainbow_cone",
                     Amount = 1,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     Enabled = true,
                     Requirements = new[]
                     {
-                        new RequirementConfig {Item = "rk_primary", Amount = 1},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1},
                         new RequirementConfig {Item = "BarleyFlour", Amount = 1}
                     }
                 });
@@ -514,19 +545,19 @@ namespace Glorious
         }
         private void LoadRainbowSword()
         {
-            var rainbowswordFab = assetRainbow.LoadAsset<GameObject>("rk_rainbowsword");
+            var rainbowswordFab = assetRainbow.LoadAsset<GameObject>("rb_rainbowsword");
             var rainbowsword = new CustomItem(rainbowswordFab, fixReference: false,
                 new ItemConfig
                 {
                     Name = "$rainbow_sword",
                     Amount = 1,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     Enabled = true,
-                    RepairStation = "rk_rainbowbridge",
+                    RepairStation = "rb_rainbowbridge",
                     Requirements = new[]
                     {
-                        new RequirementConfig {Item = "rk_primary", Amount = 3, AmountPerLevel = 1},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 3, AmountPerLevel = 1 },
+                        new RequirementConfig {Item = "rb_primary", Amount = 3, AmountPerLevel = 1},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 3, AmountPerLevel = 1 },
                         new RequirementConfig {Item = "BlackMetal", Amount = 20, AmountPerLevel = 5},
                         new RequirementConfig {Item = "LinenThread", Amount = 5, AmountPerLevel = 1}
                     }
@@ -535,19 +566,19 @@ namespace Glorious
         }
         private void LoadRainbowSwordv2()
         {
-            var rainbowswordFab = assetRainbow.LoadAsset<GameObject>("rk_rainbowswordv2");
+            var rainbowswordFab = assetRainbow.LoadAsset<GameObject>("rb_rainbowswordv2");
             var rainbowswordv2 = new CustomItem(rainbowswordFab, fixReference: false,
                 new ItemConfig
                 {
-                    Name = "$rainbow_sword",
+                    Name = "$rainbow_sword_v2",
                     Amount = 1,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     Enabled = true,
-                    RepairStation = "rk_rainbowbridge",
+                    RepairStation = "rb_rainbowbridge",
                     Requirements = new[]
                     {
-                        new RequirementConfig {Item = "rk_primary", Amount = 3, AmountPerLevel = 1},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 3, AmountPerLevel = 1 },
+                        new RequirementConfig {Item = "rb_primary", Amount = 3, AmountPerLevel = 1},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 3, AmountPerLevel = 1 },
                         new RequirementConfig {Item = "BlackMetal", Amount = 20, AmountPerLevel = 5},
                         new RequirementConfig {Item = "LinenThread", Amount = 5, AmountPerLevel = 1}
                     }
@@ -562,14 +593,14 @@ namespace Glorious
                 {
                     Name = "$claire_kiara_rainbow_dverger",
                     Amount = 1,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig { Item = ("$claire_kiara_rainbow"), Amount = 1, AmountPerLevel = 0 },
-                        new RequirementConfig { Item = ("HelmetDverger"), Amount = 1, AmountPerLevel = 0 },
-                        new RequirementConfig { Item = ("rk_primary"), Amount = 0, AmountPerLevel = 1 },
-                        new RequirementConfig { Item = ("rk_secondary"), Amount = 0, AmountPerLevel = 1 }
+                        new RequirementConfig { Item = ("$customitem_helmet_dverger_rainbow"), Amount = 1, AmountPerLevel = 0 },
+                        new RequirementConfig { Item = ("rb_primary"), Amount = 0, AmountPerLevel = 1 },
+                        new RequirementConfig { Item = ("rb_secondary"), Amount = 0, AmountPerLevel = 1 }
                     }
 
                 });
@@ -583,14 +614,14 @@ namespace Glorious
                 {
                     Name = "$mohawkpony_redearcat_rainbow_dverger",
                     Amount = 1,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig { Item = ("$mohawkpony_redearcat_rainbow"), Amount = 1, AmountPerLevel = 0 },
-                        new RequirementConfig { Item = ("HelmetDverger"), Amount = 1, AmountPerLevel = 0 },
-                        new RequirementConfig { Item = ("rk_primary"), Amount = 0, AmountPerLevel = 1 },
-                        new RequirementConfig { Item = ("rk_secondary"), Amount = 0, AmountPerLevel = 1 }
+                        new RequirementConfig { Item = ("$customitem_helmet_dverger_rainbow"), Amount = 1, AmountPerLevel = 0 },
+                        new RequirementConfig { Item = ("rb_primary"), Amount = 0, AmountPerLevel = 1 },
+                        new RequirementConfig { Item = ("rb_secondary"), Amount = 0, AmountPerLevel = 1 }
                     }
 
                 });
@@ -604,13 +635,13 @@ namespace Glorious
                 {
                     Name = "$customitem_helmet_dverger_rainbow",
                     Amount = 1,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig { Item = ("HelmetDverger"), Amount = 1},
-                        new RequirementConfig { Item = ("rk_primary"), Amount = 1},
-                        new RequirementConfig { Item = ("rk_secondary"), Amount = 1 }
+                        new RequirementConfig { Item = ("rb_primary"), Amount = 1},
+                        new RequirementConfig { Item = ("rb_secondary"), Amount = 1 }
                     }
 
                 });
@@ -623,14 +654,14 @@ namespace Glorious
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 2, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -639,24 +670,25 @@ namespace Glorious
 
             var woodBreak = aeoniumsFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(aeoniums);
         }
         private void LoadRainbowAxe()
         {
-            var rainbowaxeFab = assetRainbow.LoadAsset<GameObject>("rk_rainbowaxe");
+            var rainbowaxeFab = assetRainbow.LoadAsset<GameObject>("rb_rainbowaxe");
             var rainbowaxe = new CustomItem(rainbowaxeFab, fixReference: false,
                 new ItemConfig
                 {
                     Name = "$rainbow_axe",
                     Amount = 1,
-                    CraftingStation = "rk_rainbowbridge",
+                    CraftingStation = "rb_rainbowbridge",
                     Enabled = true,
-                    RepairStation = "rk_rainbowbridge",
+                    RepairStation = "rb_rainbowbridge",
                     Requirements = new[]
                     {
-                        new RequirementConfig {Item = "rk_primary", Amount = 3, AmountPerLevel = 1},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 3, AmountPerLevel = 1 },
+                        new RequirementConfig {Item = "rb_primary", Amount = 3, AmountPerLevel = 1},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 3, AmountPerLevel = 1 },
                         new RequirementConfig {Item = "BlackMetal", Amount = 20, AmountPerLevel = 5},
                         new RequirementConfig {Item = "LinenThread", Amount = 5, AmountPerLevel = 1}
                     }
@@ -670,14 +702,14 @@ namespace Glorious
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 2, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -686,6 +718,7 @@ namespace Glorious
 
             var woodBreak = coolpotFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(coolpot);
         }
@@ -696,14 +729,14 @@ namespace Glorious
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 2, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -712,6 +745,7 @@ namespace Glorious
 
             var woodBreak = plantFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(plant);
         }
@@ -722,14 +756,14 @@ namespace Glorious
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 2, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -738,6 +772,7 @@ namespace Glorious
 
             var woodBreak = plantFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(plant);
         }
@@ -748,14 +783,14 @@ namespace Glorious
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 2, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -764,24 +799,25 @@ namespace Glorious
 
             var woodBreak = plantFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(plant);
         }
         private void LoadWalls1()
         {
-            var wallFab = assetRainbow.LoadAsset<GameObject>("rk_hf_rainbow");
+            var wallFab = assetRainbow.LoadAsset<GameObject>("rb_hf_rainbow");
             var wall = new CustomPiece(wallFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -790,25 +826,25 @@ namespace Glorious
 
             var woodBreak = wallFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-            
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(wall);
         }
         private void LoadWalls2()
         {
-            var wallFab = assetRainbow.LoadAsset<GameObject>("rk_hf_rainbow_pastel");
+            var wallFab = assetRainbow.LoadAsset<GameObject>("rb_hf_rainbow_pastel");
             var wall = new CustomPiece(wallFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -817,25 +853,25 @@ namespace Glorious
 
             var woodBreak = wallFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(wall);
         }
         private void LoadWalls3()
         {
-            var wallFab = assetRainbow.LoadAsset<GameObject>("rk_hh_rainbow");
+            var wallFab = assetRainbow.LoadAsset<GameObject>("rb_hh_rainbow");
             var wall = new CustomPiece(wallFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -844,25 +880,25 @@ namespace Glorious
 
             var woodBreak = wallFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(wall);
         }
         private void LoadWalls4()
         {
-            var wallFab = assetRainbow.LoadAsset<GameObject>("rk_hh_rainbow_pastel");
+            var wallFab = assetRainbow.LoadAsset<GameObject>("rb_hh_rainbow_pastel");
             var wall = new CustomPiece(wallFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -871,25 +907,25 @@ namespace Glorious
 
             var woodBreak = wallFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(wall);
         }
         private void LoadWalls5()
         {
-            var wallFab = assetRainbow.LoadAsset<GameObject>("rk_vf_rainbow");
+            var wallFab = assetRainbow.LoadAsset<GameObject>("rb_vf_rainbow");
             var wall = new CustomPiece(wallFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -898,25 +934,25 @@ namespace Glorious
 
             var woodBreak = wallFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(wall);
         }
         private void LoadWalls6()
         {
-            var wallFab = assetRainbow.LoadAsset<GameObject>("rk_vf_rainbow_pastel");
+            var wallFab = assetRainbow.LoadAsset<GameObject>("rb_vf_rainbow_pastel");
             var wall = new CustomPiece(wallFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -925,25 +961,25 @@ namespace Glorious
 
             var woodBreak = wallFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(wall);
         }
         private void LoadWalls7()
         {
-            var wallFab = assetRainbow.LoadAsset<GameObject>("rk_vh_rainbow");
+            var wallFab = assetRainbow.LoadAsset<GameObject>("rb_vh_rainbow");
             var wall = new CustomPiece(wallFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -952,25 +988,25 @@ namespace Glorious
 
             var woodBreak = wallFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(wall);
         }
         private void LoadWalls8()
         {
-            var wallFab = assetRainbow.LoadAsset<GameObject>("rk_vh_rainbow_pastel");
+            var wallFab = assetRainbow.LoadAsset<GameObject>("rb_vh_rainbow_pastel");
             var wall = new CustomPiece(wallFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -979,25 +1015,25 @@ namespace Glorious
 
             var woodBreak = wallFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(wall);
         }
         private void LoadPosts1()
         {
-            var poleFab = assetRainbow.LoadAsset<GameObject>("rk_long_wood_beam");
+            var poleFab = assetRainbow.LoadAsset<GameObject>("rb_long_wood_beam");
             var pole = new CustomPiece(poleFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -1006,25 +1042,25 @@ namespace Glorious
 
             var woodBreak = poleFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(pole);
         }
         private void LoadPosts2()
         {
-            var poleFab = assetRainbow.LoadAsset<GameObject>("rk_long_wood_beam_pastel");
+            var poleFab = assetRainbow.LoadAsset<GameObject>("rb_long_wood_beam_pastel");
             var pole = new CustomPiece(poleFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -1033,25 +1069,25 @@ namespace Glorious
 
             var woodBreak = poleFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(pole);
         }
         private void LoadPosts3()
         {
-            var poleFab = assetRainbow.LoadAsset<GameObject>("rk_long_wood_pole");
+            var poleFab = assetRainbow.LoadAsset<GameObject>("rb_long_wood_pole");
             var pole = new CustomPiece(poleFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -1060,25 +1096,26 @@ namespace Glorious
 
             var woodBreak = poleFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
 
 
             PieceManager.Instance.AddPiece(pole);
         }
         private void LoadPosts4()
         {
-            var poleFab = assetRainbow.LoadAsset<GameObject>("rk_long_wood_pole_pastel");
+            var poleFab = assetRainbow.LoadAsset<GameObject>("rb_long_wood_pole_pastel");
             var pole = new CustomPiece(poleFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -1087,25 +1124,26 @@ namespace Glorious
 
             var woodBreak = poleFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
 
 
             PieceManager.Instance.AddPiece(pole);
         }
         private void LoadPosts5()
         {
-            var poleFab = assetRainbow.LoadAsset<GameObject>("rk_short_wood_beam");
+            var poleFab = assetRainbow.LoadAsset<GameObject>("rb_short_wood_beam");
             var pole = new CustomPiece(poleFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -1114,25 +1152,26 @@ namespace Glorious
 
             var woodBreak = poleFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
 
 
             PieceManager.Instance.AddPiece(pole);
         }
         private void LoadPosts6()
         {
-            var poleFab = assetRainbow.LoadAsset<GameObject>("rk_short_wood_beam_pastel");
+            var poleFab = assetRainbow.LoadAsset<GameObject>("rb_short_wood_beam_pastel");
             var pole = new CustomPiece(poleFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -1141,25 +1180,25 @@ namespace Glorious
 
             var woodBreak = poleFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(pole);
         }
         private void LoadPosts7()
         {
-            var poleFab = assetRainbow.LoadAsset<GameObject>("rk_short_wood_pole");
+            var poleFab = assetRainbow.LoadAsset<GameObject>("rb_short_wood_pole");
             var pole = new CustomPiece(poleFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -1168,25 +1207,25 @@ namespace Glorious
 
             var woodBreak = poleFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(pole);
         }
         private void LoadPosts8()
         {
-            var poleFab = assetRainbow.LoadAsset<GameObject>("rk_short_wood_pole_pastel");
+            var poleFab = assetRainbow.LoadAsset<GameObject>("rb_short_wood_pole_pastel");
             var pole = new CustomPiece(poleFab,
                 new PieceConfig
                 {
                     AllowedInDungeons = false,
-                    CraftingStation = "rk_rainbowbridge",
-                    PieceTable = "rk_rainbowhammer",
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
                     Enabled = true,
                     Requirements = new[]
                     {
                         new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_primary", Amount = 1, Recover = true},
-                        new RequirementConfig {Item = "rk_secondary", Amount = 1, Recover = true}
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
                     }
 
                 });
@@ -1195,9 +1234,233 @@ namespace Glorious
 
             var woodBreak = poleFab.GetComponent<WearNTear>();
             woodBreak.m_destroyedEffect = breakWood;
-
+            woodBreak.m_hitEffect = hitWoodStone;
 
             PieceManager.Instance.AddPiece(pole);
+        }
+        private void LoadFloor1()
+        {
+            var floorFab = assetRainbow.LoadAsset<GameObject>("rb_wood_floor");
+            var floor = new CustomPiece(floorFab,
+                new PieceConfig
+                {
+                    AllowedInDungeons = false,
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
+                    Enabled = true,
+                    Requirements = new[]
+                    {
+                        new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
+                    }
+
+                });
+            var woodBuild = floorFab.GetComponent<Piece>();
+            woodBuild.m_placeEffect = buildWood;
+
+            var woodBreak = floorFab.GetComponent<WearNTear>();
+            woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
+
+            PieceManager.Instance.AddPiece(floor);
+        }
+        private void LoadFloor2()
+        {
+            var floorFab = assetRainbow.LoadAsset<GameObject>("rb_wood_floorv2");
+            var floor = new CustomPiece(floorFab,
+                new PieceConfig
+                {
+                    AllowedInDungeons = false,
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
+                    Enabled = true,
+                    Requirements = new[]
+                    {
+                        new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
+                    }
+
+                });
+            var woodBuild = floorFab.GetComponent<Piece>();
+            woodBuild.m_placeEffect = buildWood;
+
+            var woodBreak = floorFab.GetComponent<WearNTear>();
+            woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
+
+            PieceManager.Instance.AddPiece(floor);
+        }
+        private void LoadFloor3()
+        {
+            var floorFab = assetRainbow.LoadAsset<GameObject>("rb_wood_floor_pastel");
+            var floor = new CustomPiece(floorFab,
+                new PieceConfig
+                {
+                    AllowedInDungeons = false,
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
+                    Enabled = true,
+                    Requirements = new[]
+                    {
+                        new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
+                    }
+
+                });
+            var woodBuild = floorFab.GetComponent<Piece>();
+            woodBuild.m_placeEffect = buildWood;
+
+            var woodBreak = floorFab.GetComponent<WearNTear>();
+            woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
+
+            PieceManager.Instance.AddPiece(floor);
+        }
+        private void LoadFloor4()
+        {
+            var floorFab = assetRainbow.LoadAsset<GameObject>("rb_wood_floor_pastelv2");
+            var floor = new CustomPiece(floorFab,
+                new PieceConfig
+                {
+                    AllowedInDungeons = false,
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
+                    Enabled = true,
+                    Requirements = new[]
+                    {
+                        new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
+                    }
+
+                });
+            var woodBuild = floorFab.GetComponent<Piece>();
+            woodBuild.m_placeEffect = buildWood;
+
+            var woodBreak = floorFab.GetComponent<WearNTear>();
+            woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
+
+            PieceManager.Instance.AddPiece(floor);
+        }
+        private void LoadRoof1()
+        {
+            var roofFab = assetRainbow.LoadAsset<GameObject>("rb_45_roof");
+            var roof = new CustomPiece(roofFab,
+                new PieceConfig
+                {
+                    AllowedInDungeons = false,
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
+                    Enabled = true,
+                    Requirements = new[]
+                    {
+                        new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
+                    }
+
+                });
+            var woodBuild = roofFab.GetComponent<Piece>();
+            woodBuild.m_placeEffect = buildWood;
+            
+
+            var woodBreak = roofFab.GetComponent<WearNTear>();
+            woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
+
+
+            PieceManager.Instance.AddPiece(roof);
+        }
+        private void LoadRoof2()
+        {
+            var roofFab = assetRainbow.LoadAsset<GameObject>("rb_45_roof_pastel");
+            var roof = new CustomPiece(roofFab,
+                new PieceConfig
+                {
+                    AllowedInDungeons = false,
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
+                    Enabled = true,
+                    Requirements = new[]
+                    {
+                        new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
+                    }
+
+                });
+            var woodBuild = roofFab.GetComponent<Piece>();
+            woodBuild.m_placeEffect = buildWood;
+
+
+            var woodBreak = roofFab.GetComponent<WearNTear>();
+            woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
+
+
+            PieceManager.Instance.AddPiece(roof);
+        }
+        private void LoadRoof3()
+        {
+            var roofFab = assetRainbow.LoadAsset<GameObject>("rb_45corner_roof");
+            var roof = new CustomPiece(roofFab,
+                new PieceConfig
+                {
+                    AllowedInDungeons = false,
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
+                    Enabled = true,
+                    Requirements = new[]
+                    {
+                        new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
+                    }
+
+                });
+            var woodBuild = roofFab.GetComponent<Piece>();
+            woodBuild.m_placeEffect = buildWood;
+
+
+            var woodBreak = roofFab.GetComponent<WearNTear>();
+            woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
+
+
+            PieceManager.Instance.AddPiece(roof);
+        }
+        private void LoadRoof4()
+        {
+            var roofFab = assetRainbow.LoadAsset<GameObject>("rb_45corner_roof_pastel");
+            var roof = new CustomPiece(roofFab,
+                new PieceConfig
+                {
+                    AllowedInDungeons = false,
+                    CraftingStation = "rb_rainbowbridge",
+                    PieceTable = "rb_rainbowhammer",
+                    Enabled = true,
+                    Requirements = new[]
+                    {
+                        new RequirementConfig {Item = "Wood", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_primary", Amount = 1, Recover = true},
+                        new RequirementConfig {Item = "rb_secondary", Amount = 1, Recover = true}
+                    }
+
+                });
+            var woodBuild = roofFab.GetComponent<Piece>();
+            woodBuild.m_placeEffect = buildWood;
+
+
+            var woodBreak = roofFab.GetComponent<WearNTear>();
+            woodBreak.m_destroyedEffect = breakWood;
+            woodBreak.m_hitEffect = hitWoodStone;
+
+
+            PieceManager.Instance.AddPiece(roof);
         }
 
     }

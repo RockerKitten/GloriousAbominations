@@ -1,14 +1,6 @@
-﻿# JotunnModStub
-Upon building for release, this README.md is copied from `ProjectRoot/Package/` into `ProjectRoot/` such that the readme is displayed when the project is viewed via github. Make sure to edit the README.md inside the package directory, and not the project root as your changes will be overwritten.
+﻿# Glorious 
+Rainbows rainbows and more rainbows. What more could a girl ask for?
 
-## Installation (manual)
+Glorious rainbows, brought to you by the Ladies of Odin Plus Team!
 
-
-## Features
-
-
-## Changelog
-
-
-## Known issues
-You can find the github at:
+Stay tuned for more glorious rainbow effects!
