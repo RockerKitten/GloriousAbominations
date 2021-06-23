@@ -29,9 +29,10 @@ Push-Location -Path (Split-Path -Parent $MyInvocation.MyCommand.Path)
 
 # Main Script
 Write-Host "Publishing for $Target from $TargetPath"
-
+$ErrorActionPreference = "Stop"
 if ($Target.Equals("Debug")) {
     Write-Host "Updating local installation in $ValheimPath"
+	Write-Host "Hello Poly!"
     
     $name = "$TargetAssembly" -Replace('.dll')
 
@@ -61,10 +62,16 @@ if ($Target.Equals("Debug")) {
 if($Target.Equals("Release")) {
     Write-Host "Packaging for ThunderStore..."
     $PackagePath="$ProjectPath\Package"
-
+	Write-Host "Hello again Poly"
+    $name = "$TargetAssembly" -Replace('.dll')
     Write-Host "$PackagePath\$TargetAssembly"
     New-Item -Type Directory -Path "$PackagePath\plugins" -Force
     New-Item -Type Directory -Path "$PackagePath\plugins\$name" -Force
+    #test-path -Path "$PackagePath\plugins\$name\$TargetAssembly"
+    if (test-path -Path "$PackagePath\plugins\$name\$TargetAssembly")
+    {
+    Write-Host "path exists"
+    }
     Copy-Item -Path "$TargetPath\$TargetAssembly" -Destination "$PackagePath\plugins\$name\$TargetAssembly"
     Copy-Item -Path "$PackagePath\README.md" -Destination "$ProjectPath\README.md"
     Compress-Archive -Path "$PackagePath\*" -DestinationPath "$TargetPath\$TargetAssembly.zip" -Force

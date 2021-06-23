@@ -53,7 +53,7 @@ namespace Glorious
 
         private void Awake()
         {
-            LoadLocalizaion();
+            //LoadLocalizaion();
             AssetLoad();
             ItemManager.OnVanillaItemsAvailable += LoadSounds;
             
@@ -178,7 +178,7 @@ namespace Glorious
             }
 
         }
-        public void LoadLocalizaion()
+        /*public void LoadLocalizaion()
         {
             TextAsset[] textAssets = assetRainbow.LoadAllAssets<TextAsset>();
             foreach (var textAsset in textAssets)
@@ -187,7 +187,7 @@ namespace Glorious
                 LocalizationManager.Instance.AddJson(English, textAsset.ToString());
                 
             }
-        }
+        }*/
        
     public void LoadTorchs()
 
